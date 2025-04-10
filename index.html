@@ -167,12 +167,46 @@
         padding: 0;
       }
     }
+    .leagues-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  animation: fadeInUp 0.5s ease;
+}
+
+.leagues-buttons button {
+  background: var(--input-bg);
+  color: var(--text-color);
+  border: 2px solid var(--highlight);
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.leagues-buttons button:hover {
+  background: var(--highlight);
+  color: #000;
+  transform: scale(1.05);
+}
+
   </style>
 </head>
 <body>
   <button class="theme-toggle" onclick="toggleTheme()">Tryb: <span id="themeLabel">Nocny</span></button>
   <div class="container">
     <h1>Generator Podsumowań</h1>
+    <div class="leagues-buttons">
+      <button onclick="openLeague('https:lodz.ligafanow.pl/rozgrywki/tabela/33/222')">Liga 1</button>
+      <button onclick="openLeague('https:lodz.ligafanow.pl/rozgrywki/tabela/33/223')">Liga 2</button>
+      <button onclick="openLeague('https:lodz.ligafanow.pl/rozgrywki/tabela/33/224')">Liga 3</button>
+      <button onclick="openLeague('https:lodz.ligafanow.pl/rozgrywki/tabela/33/225')">Liga 4</button>
+      <button onclick="openLeague('https:lodz.ligafanow.pl/rozgrywki/tabela/33/231')">Liga 5</button>
+      <button onclick="openLeague('https:lodz.ligafanow.pl/rozgrywki/tabela/33/232')">Liga 6</button>
+    </div>
   
     <!-- Główne pola formularza (wymagane pola oznaczone gwiazdką) -->
     <label for="teamA">Drużyna A: <span style="color: red;">⭐</span></label>
@@ -497,6 +531,9 @@
         btn.textContent = "🔽 Pokaż więcej opcji";
       }
     }
+    function openLeague(url) {
+  window.open(url, '_blank');
+}
   </script>
 </body>
 </html>
