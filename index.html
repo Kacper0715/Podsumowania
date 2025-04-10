@@ -192,12 +192,26 @@
   color: #000;
   transform: scale(1.05);
 }
+.logo-wrapper {
+  text-align: center;
+  margin-bottom: 1rem;
+  animation: fadeIn 1s ease-out;
+}
+
+.logo {
+  max-width: 180px;
+  height: auto;
+  filter: drop-shadow(0 0 8px var(--highlight));
+}
 
   </style>
 </head>
 <body>
   <button class="theme-toggle" onclick="toggleTheme()">Tryb: <span id="themeLabel">Nocny</span></button>
   <div class="container">
+    <div class="logo-wrapper">
+      <img src="https://zapodaj.net/thumbs/65461689d628c.jpg" alt="Liga Fanów Łódź" class="logo" />
+    </div>    
     <h1>Generator Podsumowań</h1>
     <div class="leagues-buttons">
       <button onclick="openLeague('https:lodz.ligafanow.pl/rozgrywki/tabela/33/222')">Liga 1</button>
