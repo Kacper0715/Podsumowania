@@ -4,550 +4,156 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Generator Podsumowań Meczu</title>
+  <link rel="stylesheet" type="text/css" href="styles.css">
   <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Roboto&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg-color: #0a0f24;
-      --container-bg: #101428;
-      --input-bg: #1c213b;
-      --text-color: #fff;
-      --highlight: #00ffae;
-      --shadow: rgba(0, 255, 174, 0.2);
-    }
-    body.light {
-      --bg-color: #f4f4f4;
-      --container-bg: #fff;
-      --input-bg: #eee;
-      --text-color: #111;
-      --highlight: #007f6e;
-      --shadow: rgba(0, 0, 0, 0.1);
-      animation: none;
-    }
-    body {
-      margin: 0;
-      font-family: 'Roboto', sans-serif;
-      background: var(--bg-color);
-      color: var(--text-color);
-      padding: 2rem 1rem 5rem;
-      transition: background 0.3s, color 0.3s;
-      animation: bgPulse 10s ease-in-out infinite;
-      background: linear-gradient(135deg, #0a0f24, #101428, #0c122a);
-      background-size: 600% 600%;
-    }
-    @keyframes bgPulse {
-      0%, 100% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-    }
-    h1 {
-      font-family: 'Russo One', sans-serif;
-      font-size: 2.5rem;
-      text-align: center;
-      color: var(--highlight);
-      animation: fadeIn 1s ease-out;
-    }
-    .container {
-      max-width: 600px;
-      margin: auto;
-      background-color: var(--container-bg);
-      padding: 2rem;
-      border-radius: 16px;
-      box-shadow: 0 0 20px var(--shadow);
-      animation: fadeInUp 0.7s ease-out;
-    }
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    label {
-      display: block;
-      margin-top: 1rem;
-      font-weight: bold;
-    }
-    input, textarea, select {
-      width: 100%;
-      padding: 0.75rem;
-      margin-top: 0.3rem;
-      border: none;
-      border-radius: 8px;
-      background: var(--input-bg);
-      color: var(--text-color);
-      font-size: 1rem;
-      transition: box-shadow 0.3s ease, background 0.3s ease;
-    }
-    input:focus, textarea:focus, select:focus {
-      outline: none;
-      box-shadow: 0 0 10px var(--highlight);
-      background-color: #2a2f4d;
-    }
-    .theme-toggle {
-      position: fixed;
-      top: 1rem;
-      right: 1rem;
-      background: var(--highlight);
-      color: #000;
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 999px;
-      font-weight: bold;
-      cursor: pointer;
-      z-index: 999;
-      transition: transform 0.2s ease;
-    }
-    .theme-toggle:hover {
-      transform: scale(1.05);
-    }
-    .sticky-button {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 1rem;
-      background: var(--container-bg);
-      box-shadow: 0 -4px 10px var(--shadow);
-      z-index: 100;
-    }
-    button.generate {
-      background-color: var(--highlight);
-      color: #000;
-      padding: 0.8rem;
-      width: 100%;
-      font-size: 1.1rem;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: background-color 0.3s ease, transform 0.2s ease;
-    }
-    button.generate:hover {
-      background-color: #00c98e;
-      transform: scale(1.02);
-    }
-    button.generate:disabled {
-      background-color: #888;
-      cursor: not-allowed;
-      transform: none;
-    }
-    button.generate.loading::after {
-      content: " ⏳";
-      animation: dots 1s steps(3, end) infinite;
-    }
-    @keyframes dots {
-      0% { content: " ⏳"; }
-      33% { content: " ⏳."; }
-      66% { content: " ⏳.."; }
-      100% { content: " ⏳..."; }
-    }
-    .output {
-      margin-top: 2rem;
-      background: #1e2640;
-      padding: 1.5rem;
-      border-radius: 12px;
-      white-space: pre-wrap;
-      box-shadow: inset 0 0 10px rgba(0, 255, 174, 0.1);
-      font-size: 1.1rem;
-      animation: fadeIn 0.5s ease-in;
-      min-height: 100px;
-    }
-    .live-preview {
-      font-style: italic;
-      color: #aaa;
-      margin-top: 1rem;
-      font-size: 0.95rem;
-      min-height: 60px;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    @media (min-width: 601px) {
-      .sticky-button {
-        position: static;
-        background: none;
-        box-shadow: none;
-        padding: 0;
-      }
-    }
-    .leagues-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.5rem;
-  margin-bottom: 1.5rem;
-  animation: fadeInUp 0.5s ease;
-}
-
-.leagues-buttons button {
-  background: var(--input-bg);
-  color: var(--text-color);
-  border: 2px solid var(--highlight);
-  padding: 0.5rem 1rem;
-  border-radius: 999px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s, transform 0.2s;
-}
-
-.leagues-buttons button:hover {
-  background: var(--highlight);
-  color: #000;
-  transform: scale(1.05);
-}
-.logo-wrapper {
-  text-align: center;
-  margin-bottom: 1rem;
-  animation: fadeIn 1s ease-out;
-}
-
-.logo {
-  max-width: 180px;
-  height: auto;
-  filter: drop-shadow(0 0 8px var(--highlight));
-}
-
-  </style>
 </head>
 <body>
   <button class="theme-toggle" onclick="toggleTheme()">Tryb: <span id="themeLabel">Nocny</span></button>
+
   <div class="container">
+
     <div class="logo-wrapper">
       <img src="https://zapodaj.net/thumbs/65461689d628c.jpg" alt="Liga Fanów Łódź" class="logo" />
     </div>    
-    <h1>Generator Podsumowań</h1>
-    <div class="leagues-buttons">
-      <button onclick="openLeague('https://lodz.ligafanow.pl/rozgrywki/tabela/33/222')">Liga 1</button>
-      <button onclick="openLeague('https://lodz.ligafanow.pl/rozgrywki/tabela/33/223')">Liga 2</button>
-      <button onclick="openLeague('https://lodz.ligafanow.pl/rozgrywki/tabela/33/224')">Liga 3</button>
-      <button onclick="openLeague('https://lodz.ligafanow.pl/rozgrywki/tabela/33/225')">Liga 4</button>
-      <button onclick="openLeague('https://lodz.ligafanow.pl/rozgrywki/tabela/33/231')">Liga 5</button>
-      <button onclick="openLeague('https://lodz.ligafanow.pl/rozgrywki/tabela/33/232')">Liga 6</button>
+
+    <h1>Generator tekstu LIGA FANÓW ŁÓDŹ</h1>
+<div class="mode-tabs">
+  <button class="tab active" onclick="switchMode('summary', this)">⚽ Podsumowanie</button>
+  <button class="tab" onclick="switchMode('preview', this)">📅 Zapowiedź</button>
+</div>
+
+
+    <!-- FORMULARZ PODSUMOWANIA -->
+    <div id="summaryForm">
+
+      <div class="leagues-buttons">
+        <button onclick="openLeague('https:lodz.ligafanow.pl/rozgrywki/tabela/33/222')">Liga 1</button>
+        <button onclick="openLeague('https:lodz.ligafanow.pl/rozgrywki/tabela/33/223')">Liga 2</button>
+        <button onclick="openLeague('https:lodz.ligafanow.pl/rozgrywki/tabela/33/224')">Liga 3</button>
+        <button onclick="openLeague('https:lodz.ligafanow.pl/rozgrywki/tabela/33/225')">Liga 4</button>
+        <button onclick="openLeague('https:lodz.ligafanow.pl/rozgrywki/tabela/33/231')">Liga 5</button>
+        <button onclick="openLeague('https:lodz.ligafanow.pl/rozgrywki/tabela/33/232')">Liga 6</button>
+      </div>
+
+      <label for="teamA">Drużyna A: <span style="color: red;">★</span></label>
+      <input id="teamA" oninput="liveUpdate()" placeholder="np. FC Łódź" autofocus />
+
+      <label for="teamB">Drużyna B: <span style="color: red;">★</span></label>
+      <input id="teamB" oninput="liveUpdate()" placeholder="np. Tęcza United" />
+
+      <label for="score">Wynik: <span style="color: red;">★</span></label>
+      <input id="score" oninput="liveUpdate()" placeholder="np. 2:1" />
+
+      <label for="totalGoals">Liczba bramek (łącznie): <span style="color: red;">★</span></label>
+      <input id="totalGoals" oninput="liveUpdate()" placeholder="np. 3" />
+
+      <label for="mvp">MVP meczu: <span style="color: red;">★</span></label>
+      <input id="mvp" oninput="liveUpdate()" placeholder="np. Kowalski" />
+
+      <button type="button" onclick="toggleAdvanced()" id="toggleAdvancedBtn" style="margin: 1rem 0;">🔽 Pokaż więcej opcji</button>
+
+      <div id="advancedFields" style="display: none;">
+        <label for="halftime">Wynik do przerwy:</label>
+        <input id="halftime" oninput="liveUpdate()" placeholder="np. 1:0" />
+        <label for="firstScorer">Pierwszy strzelec:</label>
+        <input id="firstScorer" oninput="liveUpdate()" placeholder="np. Kowalski (FC Łódź)" />
+        <label for="goalsHalftime">Bramki do przerwy:</label>
+        <input id="goalsHalftime" oninput="liveUpdate()" placeholder="np. 1" />
+        <label for="scorers">Strzelcy:</label>
+        <textarea id="scorers" oninput="liveUpdate()" placeholder="np. Kowalski 12', Nowak 33'"></textarea>
+        <label for="cards">Kartki:</label>
+        <textarea id="cards" oninput="liveUpdate()" placeholder="np. Żółta: Malinowski 45'"></textarea>
+        <label for="starA">SuperStar - Drużyna A:</label>
+        <input id="starA" oninput="liveUpdate()" placeholder="np. Kowalski" />
+        <label for="starB">SuperStar - Drużyna B:</label>
+        <input id="starB" oninput="liveUpdate()" placeholder="np. Nowak" />
+        <label for="referee">Sędzia:</label>
+        <input id="referee" oninput="liveUpdate()" placeholder="np. Tomasz Sędzia" />
+        <label for="placeA">Miejsce w tabeli - Drużyna A:</label>
+        <input id="placeA" oninput="liveUpdate()" placeholder="np. 1" />
+        <label for="placeB">Miejsce w tabeli - Drużyna B:</label>
+        <input id="placeB" oninput="liveUpdate()" placeholder="np. 4" />
+        <label for="events">Wydarzenia specjalne:</label>
+        <textarea id="events" oninput="liveUpdate()" placeholder="np. rzut karny w 89'"></textarea>
+        <label for="matchLevel">Poziom meczu:</label>
+        <input id="matchLevel" oninput="liveUpdate()" placeholder="np. niski, średni, wysoki lub opis" />
+      </div>
+
+      <label for="mode">Tryb generowania:</label>
+      <select id="mode">
+        <option value="template">Szablon (offline)</option>
+        <option value="ai">AI (OpenRouter)</option>
+      </select>
+
+      <label for="style">Styl generowania:</label>
+      <select id="style">
+        <option value="serio">Na serio</option>
+        <option value="luz">Na luzie</option>
+        <option value="poziom">Poziom meczu</option>
+        <option value="dziennikarz">Profesjonalny dziennikarz sportowy</option>
+        <option value="emocjonujacy">Emocjonujący</option>
+      </select>
+
+      <label for="apikey">OpenRouter API Key:</label>
+      <input id="apikey" placeholder="Wymagany tylko dla AI" />
+
+      <div class="live-preview" id="livePreview">Podgląd na żywo...</div>
+      <div class="ai-warning" id="aiWarning" style="display: none;">
+        ⚠️ Podsumowanie zostało wygenerowane przez AI. Zweryfikuj je przed publikacją — mogą pojawić się błędy lub nieścisłości!
+      </div>
+      <div class="output" id="summary"></div>
+
+      <button class="generate" id="generateBtn" onclick="generateSummary()">Generuj podsumowanie</button>
+      <button class="generate" id="copyBtn" onclick="copySummary()">Kopiuj</button>
     </div>
-  
-    <!-- Główne pola formularza (wymagane pola oznaczone gwiazdką) -->
-    <label for="teamA">Drużyna A: <span style="color: red;">⭐</span></label>
-    <input id="teamA" oninput="liveUpdate()" placeholder="np. FC Łódź" autofocus />
-  
-    <label for="teamB">Drużyna B: <span style="color: red;">⭐</span></label>
-    <input id="teamB" oninput="liveUpdate()" placeholder="np. Tęcza United" />
-  
-    <label for="score">Wynik: <span style="color: red;">⭐</span></label>
-    <input id="score" oninput="liveUpdate()" placeholder="np. 2:1" />
-  
-    <label for="totalGoals">Liczba bramek (łącznie): <span style="color: red;">★</span></label>
-    <input id="totalGoals" oninput="liveUpdate()" placeholder="np. 3" />
-  
-    <label for="mvp">MVP meczu: <span style="color: red;">★</span></label>
-    <input id="mvp" oninput="liveUpdate()" placeholder="np. Kowalski" />
-  
-    <!-- Przycisk wyświetlający dodatkowe opcje -->
-    <button type="button" onclick="toggleAdvanced()" id="toggleAdvancedBtn" style="margin: 1rem 0;">🔽 Pokaż więcej opcji</button>
-  
-    <!-- Opcje dodatkowe -->
-    <div id="advancedFields" style="display: none;">
-      <label for="halftime">Wynik do przerwy:</label>
-      <input id="halftime" oninput="liveUpdate()" placeholder="np. 1:0" />
-  
-      <label for="firstScorer">Pierwszy strzelec:</label>
-      <input id="firstScorer" oninput="liveUpdate()" placeholder="np. Kowalski (FC Łódź)" />
-  
-      <label for="goalsHalftime">Bramki do przerwy:</label>
-      <input id="goalsHalftime" oninput="liveUpdate()" placeholder="np. 1" />
-  
-      <label for="scorers">Strzelcy:</label>
-      <textarea id="scorers" oninput="liveUpdate()" placeholder="np. Kowalski 12', Nowak 33'"></textarea>
-  
-      <label for="cards">Kartki:</label>
-      <textarea id="cards" oninput="liveUpdate()" placeholder="np. Żółta: Malinowski 45'"></textarea>
-  
-      <label for="starA">SuperStar - Drużyna A:</label>
-      <input id="starA" oninput="liveUpdate()" placeholder="np. Kowalski" />
-  
-      <label for="starB">SuperStar - Drużyna B:</label>
-      <input id="starB" oninput="liveUpdate()" placeholder="np. Nowak" />
-  
-      <label for="referee">Sędzia:</label>
-      <input id="referee" oninput="liveUpdate()" placeholder="np. Tomasz Sędzia" />
-  
-      <label for="placeA">Miejsce w tabeli - Drużyna A:</label>
-      <input id="placeA" oninput="liveUpdate()" placeholder="np. 1" />
-  
-      <label for="placeB">Miejsce w tabeli - Drużyna B:</label>
-      <input id="placeB" oninput="liveUpdate()" placeholder="np. 4" />
-  
-      <label for="events">Wydarzenia specjalne:</label>
-      <textarea id="events" oninput="liveUpdate()" placeholder="np. rzut karny w 89'"></textarea>
-      
-      <label for="matchLevel">Poziom meczu:</label>
-      <input id="matchLevel" oninput="liveUpdate()" placeholder="np. niski, średni, wysoki lub opis" />
+
+    <!-- FORMULARZ ZAPOWIEDZI -->
+    <div id="previewForm" style="display: none;">
+      <label for="prevTeamA">Drużyna A:</label>
+      <input id="prevTeamA" placeholder="np. FC Łódź" />
+
+      <label for="prevTeamB">Drużyna B:</label>
+      <input id="prevTeamB" placeholder="np. Tęcza United" />
+
+      <label for="matchDate">Data meczu:</label>
+      <input id="matchDate" type="date" />
+
+      <label for="matchTime">Godzina meczu:</label>
+      <input id="matchTime" type="time" />
+
+      <label for="venue">Miejsce meczu:</label>
+      <input id="venue" placeholder="np. Stadion Łodzi" />
+
+      <label for="formA">Forma Drużyny A (np. W-W-P):</label>
+      <input id="formA" />
+
+      <label for="formB">Forma Drużyny B:</label>
+      <input id="formB" />
+
+      <label for="keyPlayers">Kluczowi zawodnicy:</label>
+      <textarea id="keyPlayers" placeholder="np. Kowalski, Nowak, Wiśniewski"></textarea>
+
+      <label for="coachComment">Komentarz trenera (opcjonalnie):</label>
+      <textarea id="coachComment"></textarea>
+
+      <label for="prediction">Typ eksperta (np. 2:1 dla FC Łódź):</label>
+      <input id="prediction" />
+
+      <label for="previewStyle">Styl zapowiedzi:</label>
+      <select id="previewStyle">
+        <option value="serio">Na serio</option>
+        <option value="luz">Na luzie</option>
+        <option value="dziennikarz">Dziennikarsko</option>
+        <option value="emocjonujacy">Emocjonująco</option>
+      </select>
+
+      <button class="generate" onclick="generatePreview()">Generuj zapowiedź</button>
+      <div class="output" id="previewOutput"></div>
     </div>
-  
-    <label for="mode">Tryb generowania:</label>
-    <select id="mode">
-      <option value="template">Szablon (offline)</option>
-      <option value="ai">AI (OpenRouter)</option>
-    </select>
-  
-    <label for="style">Styl generowania:</label>
-    <select id="style">
-      <option value="serio">Na serio</option>
-      <option value="luz">Na luzie</option>
-      <option value="poziom">Poziom meczu</option>
-      <option value="dziennikarz">Profesjonalny dziennikarz sportowy</option>
-      <option value="emocjonujacy">Emocjonujący</option>
-    </select>
-  
-    <label for="apikey">OpenRouter API Key:</label>
-    <input id="apikey" placeholder="Wymagany tylko dla AI" />
-  
-    <div class="live-preview" id="livePreview">Podgląd na żywo...</div>
-    <div class="output" id="summary"></div>
-  
-    <button class="generate" id="generateBtn" onclick="generateSummary()">Generuj podsumowanie</button>
-    <button class="generate" id="copyBtn" onclick="copySummary()">Kopiuj</button>
+
+    <div id="toast" class="toast">Podsumowanie skopiowane do schowka!</div>
   </div>
-  
-  <script>
-    function getData() {
-      return {
-        teamA: document.getElementById("teamA").value,
-        teamB: document.getElementById("teamB").value,
-        score: document.getElementById("score").value,
-        totalGoals: document.getElementById("totalGoals").value,
-        mvp: document.getElementById("mvp").value,
-        halftime: document.getElementById("halftime").value,
-        firstScorer: document.getElementById("firstScorer").value,
-        goalsHalftime: document.getElementById("goalsHalftime").value,
-        scorers: document.getElementById("scorers").value,
-        cards: document.getElementById("cards").value,
-        starA: document.getElementById("starA").value,
-        starB: document.getElementById("starB").value,
-        referee: document.getElementById("referee").value,
-        placeA: document.getElementById("placeA").value,
-        placeB: document.getElementById("placeB").value,
-        events: document.getElementById("events").value,
-        matchLevel: document.getElementById("matchLevel").value
-      };
-    }
-  
-    // Rozszerzona walidacja – wymagane pola: drużyny, wynik, liczba bramek i MVP meczu
-    function validate(data) {
-      if (!data.teamA || !data.teamB || !data.score || !data.totalGoals || !data.mvp) {
-        alert("Wprowadź drużyny, wynik, liczbę bramek oraz MVP meczu!");
-        return false;
-      }
-      return true;
-    }
-  
-    async function generateSummary() {
-      const data = getData();
-      const mode = document.getElementById("mode").value;
-      const style = document.getElementById("style").value;
-      const apiKey = document.getElementById("apikey").value;
-      const summaryDiv = document.getElementById("summary");
-      const generateBtn = document.getElementById("generateBtn");
-  
-      // Jeśli wybrano styl "Poziom meczu", pole matchLevel musi być wypełnione
-      if (style === "poziom" && data.matchLevel.trim() === "") {
-        alert("Aby użyć stylu 'Poziom meczu', wypełnij pole 'Poziom meczu'.");
-        return;
-      }
-  
-      if (!validate(data)) {
-        generateBtn.disabled = false;
-        generateBtn.classList.remove("loading");
-        return;
-      }
-  
-      generateBtn.disabled = true;
-      generateBtn.classList.add("loading");
-      summaryDiv.textContent = "";
-  
-      const finish = () => {
-        generateBtn.disabled = false;
-        generateBtn.classList.remove("loading");
-      };
-  
-      // Ustalenie promptu w zależności od wybranego stylu
-      let styleInstructions = "";
-      if (style === "luz") {
-        styleInstructions = "Napisz w lekkim, zabawnym stylu, pełnym luzu i emocji.";
-      } else if (style === "poziom") {
-        styleInstructions = "Skoncentruj się na analizie poziomu meczu. Użyj podanej oceny lub opisu, by precyzyjnie przedstawić jakość gry, intensywność oraz zaangażowanie zawodników.";
-      } else if (style === "dziennikarz") {
-        styleInstructions = "Napisz w stylu profesjonalnego dziennikarza sportowego, precyzyjnie analizując przebieg i kontekst meczu.";
-      } else if (style === "emocjonujacy") {
-        styleInstructions = "Napisz emocjonujące podsumowanie pełne napięcia i dramatyzmu, oddające emocje towarzyszące meczowi.";
-      } else {
-        styleInstructions = "Napisz w poważnym, sportowo-analitycznym stylu.";
-      }
-  
-      if (mode === "template") {
-        typeText(summaryDiv, generateTemplate(data, style), 0, finish);
-      } else {
-        if (!apiKey) {
-          alert("Wprowadź klucz API");
-          finish();
-          return;
-        }
-  
-        let prompt = `${styleInstructions}\nStwórz podsumowanie meczu piłkarskiego pomiędzy ${data.teamA} i ${data.teamB}.\nWynik końcowy: ${data.score}.`;
-  
-        if (data.halftime) prompt += ` (do przerwy: ${data.halftime}).`;
-        if (data.firstScorer) prompt += `\nPierwszy strzelec: ${data.firstScorer}.`;
-        if (data.totalGoals) prompt += `\nBramki: ${data.totalGoals}`;
-        if (data.goalsHalftime) prompt += ` (do przerwy: ${data.goalsHalftime})`;
-        if (data.totalGoals || data.goalsHalftime) prompt += `.`;
-  
-        if (data.scorers) prompt += `\nStrzelcy: ${data.scorers}.`;
-        if (data.cards) prompt += `\nKartki: ${data.cards}.`;
-        if (data.mvp) prompt += `\nMVP: ${data.mvp}.`;
-        if (data.starA) prompt += `\nSuperStar ${data.teamA}: ${data.starA}.`;
-        if (data.starB) prompt += `\nSuperStar ${data.teamB}: ${data.starB}.`;
-        if (data.referee) prompt += `\nSędzia: ${data.referee}.`;
-        if (data.placeA || data.placeB) {
-          prompt += `\nMiejsca w tabeli:`;
-          if (data.placeA) prompt += ` ${data.teamA} - ${data.placeA}`;
-          if (data.placeB) prompt += `, ${data.teamB} - ${data.placeB}`;
-          prompt += `.`;
-        }
-        if (data.events) prompt += `\nDodatkowe wydarzenia: ${data.events}.`;
-        // Dla stylu "Poziom meczu" dodajemy ocenę, jeśli została podana
-        if (style === "poziom" && data.matchLevel) {
-          prompt += `\nPoziom meczu: ${data.matchLevel}.`;
-        }
-  
-        try {
-          const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-            method: "POST",
-            headers: {
-              "Authorization": `Bearer ${apiKey}`,
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              model: "gpt-3.5-turbo",
-              messages: [{ role: "user", content: prompt }],
-              temperature: 0.9
-            })
-          });
-  
-          const json = await res.json();
-          const aiText = json.choices?.[0]?.message?.content;
-  
-          if (json.error || !aiText) {
-            summaryDiv.textContent = `Błąd API: ${json.error?.message || "Brak odpowiedzi z AI"}`;
-            finish();
-          } else {
-            typeText(summaryDiv, aiText, 0, finish);
-          }
-        } catch (e) {
-          summaryDiv.textContent = `Błąd połączenia: ${e.message}`;
-          finish();
-        }
-      }
-    }
-  
-    function typeText(element, text, i = 0, onDone = () => {}) {
-      element.textContent = "";
-      let index = i;
-      function typer() {
-        if (index < text.length) {
-          element.textContent += text.charAt(index);
-          index++;
-          setTimeout(typer, 15);
-        } else {
-          onDone();
-        }
-      }
-      typer();
-    }
-  
-    function liveUpdate() {
-      const data = getData();
-      const style = document.getElementById("style").value;
-      const preview = generateTemplate(data, style);
-      typeLivePreview(preview);
-    }
-  
-    let typingTimeout;
-    function typeLivePreview(text) {
-      clearTimeout(typingTimeout);
-      const el = document.getElementById("livePreview");
-      el.textContent = "";
-      let i = 0;
-      function typer() {
-        if (i < text.length) {
-          el.textContent += text.charAt(i);
-          i++;
-          typingTimeout = setTimeout(typer, 20);
-        }
-      }
-      typer();
-    }
-  
-    function generateTemplate(data, style) {
-      const warianty = [
-        `${data.teamA} vs ${data.teamB} - wynik: ${data.score}. MVP: ${data.mvp}. ${data.events}`,
-        `${data.teamA} i ${data.teamB} rozegrali mecz zakończony ${data.score}. Strzelcy: ${data.scorers}.`,
-        `Mecz ${data.teamA} - ${data.teamB}: ${data.score}. ${data.mvp} zagrał świetnie!`
-      ];
-      if (style === "luz") {
-        warianty[0] = `Ależ mecz! ${data.teamA} kontra ${data.teamB}, wynik ${data.score}, MVP: ${data.mvp}!`;
-        warianty[1] = `${data.teamA} i ${data.teamB} dali show! Strzelcy: ${data.scorers}. Wynik: ${data.score}`;
-        warianty[2] = `${data.mvp} pokazał klasę, a wynik meczu to ${data.score}`;
-      }
-      return warianty[Math.floor(Math.random() * warianty.length)];
-    }
-  
-    function toggleTheme() {
-      document.body.classList.toggle("light");
-      const isLight = document.body.classList.contains("light");
-      document.getElementById("themeLabel").textContent = isLight ? "Dzienny" : "Nocny";
-      localStorage.setItem("theme", isLight ? "light" : "dark");
-    }
-  
-    window.addEventListener("DOMContentLoaded", () => {
-      if (localStorage.getItem("theme") === "light") {
-        document.body.classList.add("light");
-        document.getElementById("themeLabel").textContent = "Dzienny";
-      }
-    });
-  
-    document.addEventListener("keydown", function(e) {
-      if (e.key === "Enter" && !e.shiftKey && document.activeElement.tagName !== "TEXTAREA") {
-        e.preventDefault();
-        document.getElementById("generateBtn").click();
-      }
-    });
-  
-    function copySummary() {
-      const text = document.getElementById("summary").textContent;
-      if (!text.trim()) {
-        alert("Brak wygenerowanego podsumowania!");
-        return;
-      }
-      navigator.clipboard.writeText(text)
-        .then(() => {
-          alert("Podsumowanie skopiowane do schowka!");
-        })
-        .catch(err => {
-          console.error("Błąd kopiowania:", err);
-        });
-    }
-  
-    // Zaktualizowana funkcja toggleAdvanced sprawdzająca także pusty string
-    function toggleAdvanced() {
-      const advanced = document.getElementById("advancedFields");
-      const btn = document.getElementById("toggleAdvancedBtn");
-      if (advanced.style.display === "none" || advanced.style.display === "") {
-        advanced.style.display = "block";
-        btn.textContent = "🔼 Ukryj dodatkowe opcje";
-      } else {
-        advanced.style.display = "none";
-        btn.textContent = "🔽 Pokaż więcej opcji";
-      }
-    }
-    function openLeague(url) {
-  window.open(url, '_blank');
-}
-  </script>
+
+  <script src="script.js"></script>
 </body>
 </html>
