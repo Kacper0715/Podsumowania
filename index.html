@@ -17,22 +17,23 @@
     </div>    
 
     <h1>Generator tekstu LIGA FANÓW ŁÓDŹ</h1>
-<div class="mode-tabs">
-  <button class="tab active" onclick="switchMode('summary', this)">⚽ Podsumowanie</button>
-  <button class="tab disabled-tab" title="W trakcie budowy 🔧" disabled>📅 Zapowiedź</button>
-</div>
+    <div class="mode-tabs">
+      <button class="tab active" onclick="switchMode('summary', this)">⚽ Podsumowanie</button>
+      <button class="tab inactive-tab" onclick="showToast('🔧 Tryb zapowiedzi jest w trakcie budowy!', 'info')">📅 Zapowiedź</button>
+    </div>
+    
 
 
     <!-- FORMULARZ PODSUMOWANIA -->
     <div id="summaryForm">
 
       <div class="leagues-buttons">
-        <button onclick="openLeague('https:lodz.ligafanow.pl/rozgrywki/tabela/33/222')">Liga 1</button>
-        <button onclick="openLeague('https:lodz.ligafanow.pl/rozgrywki/tabela/33/223')">Liga 2</button>
-        <button onclick="openLeague('https:lodz.ligafanow.pl/rozgrywki/tabela/33/224')">Liga 3</button>
-        <button onclick="openLeague('https:lodz.ligafanow.pl/rozgrywki/tabela/33/225')">Liga 4</button>
-        <button onclick="openLeague('https:lodz.ligafanow.pl/rozgrywki/tabela/33/231')">Liga 5</button>
-        <button onclick="openLeague('https:lodz.ligafanow.pl/rozgrywki/tabela/33/232')">Liga 6</button>
+        <button onclick="openLeague('https://lodz.ligafanow.pl/rozgrywki/tabela/33/222')">Liga 1</button>
+        <button onclick="openLeague('https://lodz.ligafanow.pl/rozgrywki/tabela/33/223')">Liga 2</button>
+        <button onclick="openLeague('https://lodz.ligafanow.pl/rozgrywki/tabela/33/224')">Liga 3</button>
+        <button onclick="openLeague('https://lodz.ligafanow.pl/rozgrywki/tabela/33/225')">Liga 4</button>
+        <button onclick="openLeague('https://lodz.ligafanow.pl/rozgrywki/tabela/33/231')">Liga 5</button>
+        <button onclick="openLeague('https://lodz.ligafanow.pl/rozgrywki/tabela/33/232')">Liga 6</button>
       </div>
 
       <label for="teamA">Drużyna A: <span style="color: red;">★</span></label>
