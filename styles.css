@@ -285,4 +285,8 @@
     cursor: not-allowed;
     pointer-events: none;
   }
+  .inactive-tab {
+    opacity: 0.7;
+    cursor: default;
+  }
   
