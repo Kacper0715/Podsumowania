@@ -280,4 +280,9 @@
     background-color: var(--highlight);
     color: #fff;
   }
-    
+  .disabled-tab {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  
