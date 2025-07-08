@@ -110,18 +110,17 @@ async function generateSummary() {
 
     try {
       const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${apiKey}`,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-  model: "openai/gpt-3.5-turbo",
-  messages: [{ role: "user", content: prompt }],
-  temperature: 0.9
-})
-      });
-
+  method: "POST",
+  headers: {
+    "Authorization": `Bearer ${apiKey}`,
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    model: "openai/gpt-3.5-turbo",
+    messages: [{ role: "user", content: prompt }],
+    temperature: 0.9
+  })
+});
       const json = await res.json();
       const aiText = json.choices?.[0]?.message?.content;
 
