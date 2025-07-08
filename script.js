@@ -33,6 +33,7 @@ async function generateSummary() {
   const mode = document.getElementById("mode").value;
   const style = document.getElementById("style").value;
   const apiKey = document.getElementById("apikey").value;
+  const model = document.getElementById("modelSelect").value;
   const summaryDiv = document.getElementById("summary");
   const generateBtn = document.getElementById("generateBtn");
 
@@ -57,21 +58,16 @@ async function generateSummary() {
   };
 
   let styleInstructions = "";
-  switch (style) {
-    case "luz":
-      styleInstructions = "Napisz w lekkim, zabawnym stylu, pełnym luzu i emocji.";
-      break;
-    case "poziom":
-      styleInstructions = "Skoncentruj się na analizie poziomu meczu.";
-      break;
-    case "dziennikarz":
-      styleInstructions = "Napisz w stylu profesjonalnego dziennikarza sportowego.";
-      break;
-    case "emocjonujacy":
-      styleInstructions = "Napisz emocjonujące podsumowanie pełne napięcia.";
-      break;
-    default:
-      styleInstructions = "Napisz w poważnym, sportowo-analitycznym stylu.";
+  if (style === "luz") {
+    styleInstructions = "Napisz w lekkim, zabawnym stylu, pełnym luzu i emocji.";
+  } else if (style === "poziom") {
+    styleInstructions = "Skoncentruj się na analizie poziomu meczu.";
+  } else if (style === "dziennikarz") {
+    styleInstructions = "Napisz w stylu profesjonalnego dziennikarza sportowego.";
+  } else if (style === "emocjonujacy") {
+    styleInstructions = "Napisz emocjonujące podsumowanie pełne napięcia.";
+  } else {
+    styleInstructions = "Napisz w poważnym, sportowo-analitycznym stylu.";
   }
 
   if (mode === "template") {
@@ -110,17 +106,18 @@ async function generateSummary() {
 
     try {
       const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-  method: "POST",
-  headers: {
-    "Authorization": `Bearer ${apiKey}`,
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-    model: "openai/gpt-3.5-turbo",
-    messages: [{ role: "user", content: prompt }],
-    temperature: 0.9
-  })
-});
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${apiKey}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          model: model,
+          messages: [{ role: "user", content: prompt }],
+          temperature: 0.9
+        })
+      });
+
       const json = await res.json();
       const aiText = json.choices?.[0]?.message?.content;
 
