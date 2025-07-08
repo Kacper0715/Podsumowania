@@ -116,10 +116,10 @@ async function generateSummary() {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          model: "gpt-3.5-turbo",
-          messages: [{ role: "user", content: prompt }],
-          temperature: 0.9
-        })
+  model: "openai/gpt-3.5-turbo",
+  messages: [{ role: "user", content: prompt }],
+  temperature: 0.9
+})
       });
 
       const json = await res.json();
