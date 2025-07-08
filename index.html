@@ -95,15 +95,12 @@
       <label for="apikey">OpenRouter API Key:</label>
       <input id="apikey" placeholder="Wymagany tylko dla AI" />
 
-      <!-- DODANE: wybór modelu AI -->
+       <!-- DODANE: wybór modelu AI - tylko darmowe modele OpenRouter -->
       <label for="model">Wybierz model AI:</label>
-      <select id="model" title="Wybierz model AI, w tym darmowe modele z OpenRouter">
+      <select id="model" title="Wybierz model AI, tylko darmowe modele OpenRouter">
         <option value="gpt-3.5-turbo" selected>GPT-3.5 Turbo (OpenRouter) - darmowy</option>
         <option value="mistral" >Mistral 7B (OpenRouter) - darmowy</option>
         <option value="openchat/openchat-3.5-1210">OpenChat 3.5 (OpenRouter) - darmowy</option>
-        <option value="google/gemini-pro">Gemini Pro (Google)</option>
-        <option value="anthropic/claude-3-haiku">Claude 3 Haiku (Anthropic)</option>
-        <option value="gpt-4">GPT-4 (OpenAI)</option>
       </select>
 
       <div class="live-preview" id="livePreview">Podgląd na żywo...</div>
